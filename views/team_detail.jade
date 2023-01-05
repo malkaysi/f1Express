@@ -1,0 +1,20 @@
+extends layout
+
+block content
+
+  h1 Team: #{team.name}
+
+    h4 #{team.description}
+
+  div(style='margin-left:20px;margin-top:20px')
+
+    h4 Cars
+
+    dl
+      each car in team_cars
+        dt
+          a(href=car.url) #{car.make}
+        dd #{car.description}
+
+      else
+        p This team has no cars
