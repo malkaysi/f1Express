@@ -39,7 +39,15 @@ exports.car_list = function (req, res, next) {
 
 // Display detail list of Car
 exports.car_detail = (req, res) => {
-  res.send(`Not Implemented: Car detail: ${req.params.id}`);
+  Car.findById(req.params.id)
+      .populate('team')
+      .exec(function (err, car) {
+        if (err) {
+          return next(err);
+        }
+        // Successful, so render
+        res.render("car_detail", { title: "Car Detail", car})
+      })
 }
 
 // Display Car create form on GET.

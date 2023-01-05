@@ -1,0 +1,10 @@
+extends layout
+
+block content
+  h1 Title: #{car.make}
+
+  p #[strong Team:]
+    a(href=car.team.url) #{car.team.name}
+  p #[strong Description:] #{car.description}
+  p #[strong Price:] #{car.price}
+  p #[strong Cars Developed:] #{car.number_in_stock}
