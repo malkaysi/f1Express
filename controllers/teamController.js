@@ -1,9 +1,20 @@
-const Team = require("../models/team");
+const Team = require("../models/team.js");
 
-// Display list of Teams
-exports.team_list = (req, res) => {
-  res.send("Not Implemented: Team List");
-}
+// Display list of all Teams.
+exports.team_list = function (req, res, next) {
+  Team.find()
+    .sort([["name", "ascending"]])
+    .exec(function (err, list_teams) {
+      if (err) {
+        return next(err);
+      }
+      //Successful, so render
+      res.render("team_list", {
+        title: "Team List",
+        team_list: list_teams,
+      });
+    });
+};
 
 // Display detail list of Team
 exports.team_detail = (req, res) => {

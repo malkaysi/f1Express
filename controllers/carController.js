@@ -1,13 +1,41 @@
-const Car = require("../models/car");
+const Car = require("../models/car.js");
+const Team = require("../models/team.js");
+
+const async = require("async");
 
 exports.index = (req, res) => {
-  res.send("NOT IMPLEMENTED: Site Home Page");
+  async.parallel(
+    {
+      car_count(callback) {
+        Car.countDocuments({}, callback); // Pass an empty object as match condition to find all documents of this collection
+      },
+      team_count(callback) {
+        Team.countDocuments({}, callback);
+      },
+    },
+    (err, results) => {
+      res.render("index", {
+        title: "Formula 1 Home",
+        error: err,
+        data: results,
+      });
+    }
+  );
 };
 
 // Display list of Cars
-exports.car_list = (req, res) => {
-  res.send("Not Implemented: Car List");
-}
+exports.car_list = function (req, res, next) {
+  Car.find({}, "make team")
+    .sort({ title: 1 })
+    .populate("team")
+    .exec(function (err, list_cars) {
+      if (err) {
+        return next(err);
+      }
+      //Successful, so render
+      res.render("car_list", { title: "Car List", list_cars: list_cars });
+    });
+};
 
 // Display detail list of Car
 exports.car_detail = (req, res) => {
